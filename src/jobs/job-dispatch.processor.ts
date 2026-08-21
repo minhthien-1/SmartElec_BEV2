@@ -46,8 +46,6 @@ export class JobDispatchProcessor extends WorkerHost {
     const latitude = session.latitude || customer.latitude;
     const longitude = session.longitude || customer.longitude;
 
-    // Tạm thời comment logic check khoảng cách 10km, 30km theo yêu cầu
-    /*
     if (!latitude || !longitude) {
       this.logger.warn(`❌ Session #${session.id} has no lat/lng. Dispatching to all online technicians.`);
       await this.dispatchToAllOnline(session, attempt);
@@ -84,7 +82,7 @@ export class JobDispatchProcessor extends WorkerHost {
             this.logger.log(
               `🚀 [Dispatch] Đã gửi thông báo tới Thợ #${tech.id}`,
             );
-          } catch (err) {
+          } catch (err: any) {
             this.logger.error(
               `❌ [Dispatch] Lỗi gửi thông báo tới Thợ #${tech.id}: ${err.message}`,
             );
@@ -116,10 +114,6 @@ export class JobDispatchProcessor extends WorkerHost {
         `⏱️ Scheduled Final Check (Attempt 3) for Session #${sessionId} in ${isUrgent ? 13 : 8} minutes.`,
       );
     }
-    */
-
-    this.logger.warn(`⚠️ Bỏ qua check vị trí. Gửi thông báo đến toàn bộ thợ online.`);
-    await this.dispatchToAllOnline(session, attempt);
   }
 
   private async dispatchToAllOnline(session: any, attempt: number) {
