@@ -128,6 +128,10 @@ export class JobDispatchProcessor extends WorkerHost {
     });
 
     for (const tech of onlineTechs) {
+      if (!tech.fcmToken || tech.fcmToken.trim() === '') {
+        this.logger.warn(`⚠️ [Dispatch] Bỏ qua thợ #${tech.id} vì fcmToken bị rỗng.`);
+        continue;
+      }
       await this.notificationsService.sendNotification({
         token: tech.fcmToken,
         title: session.isDangerous
