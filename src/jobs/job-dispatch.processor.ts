@@ -132,18 +132,22 @@ export class JobDispatchProcessor extends WorkerHost {
         this.logger.warn(`⚠️ [Dispatch] Bỏ qua thợ #${tech.id} vì fcmToken bị rỗng.`);
         continue;
       }
-      await this.notificationsService.sendNotification({
-        token: tech.fcmToken,
-        title: session.isDangerous
-          ? '🆘 KHẨN CẤP: ĐƠN MỚI!'
-          : 'Có đơn mới gần bạn! 🛠️',
-        body: `Sửa ${session.deviceType || 'thiết bị'}: ${session.symptom || 'Cần kiểm tra'}.`,
-        channelId: 'job_alerts',
-        data: {
-          type: 'NEW_JOB',
-          jobId: session.id.toString(),
-        },
-      });
+      try {
+        await this.notificationsService.sendNotification({
+          token: tech.fcmToken,
+          title: session.isDangerous
+            ? '🆘 KHẨN CẤP: ĐƠN MỚI!'
+            : 'Có đơn mới gần bạn! 🛠️',
+          body: `Sửa ${session.deviceType || 'thiết bị'}: ${session.symptom || 'Cần kiểm tra'}.`,
+          channelId: 'job_alerts',
+          data: {
+            type: 'NEW_JOB',
+            jobId: session.id.toString(),
+          },
+        });
+      } catch (err: any) {
+        this.logger.error(`❌ [Dispatch] Lỗi gửi thông báo cho thợ #${tech.id}: ${err.message}`);
+      }
     }
 
     if (attempt === 1) {
