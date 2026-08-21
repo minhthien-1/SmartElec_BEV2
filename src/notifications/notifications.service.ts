@@ -11,13 +11,18 @@ export class NotificationsService implements OnModuleInit {
   onModuleInit() {
     // Khởi tạo Firebase Admin
     // Ưu tiên tệp secret trên Render, nếu không có thì dùng tệp local
-    let serviceAccountPath = path.join(
-      process.cwd(),
-      'firebase-service-account.json',
-    );
+    const fs = require('fs');
+    let serviceAccountPath = '/etc/secrets/firebase-service-account.json'; // Render Secret File default path
+
+    if (!fs.existsSync(serviceAccountPath)) {
+      serviceAccountPath = '/etc/secrets/service-account.json';
+    }
+
+    if (!fs.existsSync(serviceAccountPath)) {
+      serviceAccountPath = path.join(process.cwd(), 'firebase-service-account.json');
+    }
 
     // Nếu không tìm thấy file Render (thường là khi chạy local), thử file local cũ
-    const fs = require('fs');
     if (!fs.existsSync(serviceAccountPath)) {
       serviceAccountPath = path.join(process.cwd(), 'service-account.json');
     }
