@@ -1120,9 +1120,11 @@ export class ChatsService {
     }
 
     if (session.status !== JobStatus.AI_CONSULTING) {
+      console.log(`❌ bookTechnician bị từ chối do trạng thái không phải AI_CONSULTING (hiện tại: ${session.status})`);
       return session;
     }
 
+    console.log(`✅ bookTechnician tiếp tục update trạng thái thành BROADCASTING cho session #${sessionId}`);
     const updateResult = await this.prisma.chatSession.updateMany({
       where: {
         id: sessionId,

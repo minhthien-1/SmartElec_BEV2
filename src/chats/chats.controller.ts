@@ -350,6 +350,7 @@ export class ChatsController {
       longitude?: number;
     },
   ) {
+    console.log(`--- [API HITTING] POST /chats/${sessionId}/book ---`);
     const { userId, role } = getRequestUser(req);
     const session = await this.chatsService.bookTechnicianFromSession(
       sessionId,
