@@ -869,6 +869,22 @@ export class AuthService {
     };
   }
 
+  async logout(userId: number) {
+    try {
+      await this.prisma.user.update({
+        where: { id: userId },
+        data: {
+          fcmToken: null,
+          isOnline: false,
+        },
+      });
+      return { message: 'Đăng xuất thành công' };
+    } catch (error) {
+      // Ignore if user not found (already deleted, etc)
+      return { message: 'Đăng xuất thành công (User not found)' };
+    }
+  }
+
   private async assertValidForgotPasswordOtp(email: string, otp: string) {
     const record = await this.forgotPasswordOtpStore.get(email);
 

@@ -31,6 +31,12 @@ export class AuthController {
     return this.authService.login(loginDto.phoneNumber, loginDto.password);
   }
 
+  @Post('logout')
+  @UseGuards(JwtAuthGuard)
+  async logout(@Req() req: Request & { user: { userId: number } }) {
+    return this.authService.logout(this.getRequestUserId(req));
+  }
+
   @Get('profile')
   @UseGuards(JwtAuthGuard)
   async getProfile(@Req() req: Request & { user: { userId: number } }) {
