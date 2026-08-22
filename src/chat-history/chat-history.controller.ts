@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ChatHistoryService } from './chat-history.service';
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsBoolean } from 'class-validator';
 
 // DTO để validate request body
 class SaveHistoryDto {
@@ -26,6 +26,10 @@ class SaveHistoryDto {
   @IsString()
   @IsOptional()
   sessionType?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isDangerous?: boolean;
 }
 
 @Controller('chats')
@@ -56,7 +60,7 @@ export class ChatHistoryController {
     }
 
     const userId = req.user.userId;
-    return this.chatHistoryService.saveSession(userId, body.title, body.summary, undefined, body.sessionType as any);
+    return this.chatHistoryService.saveSession(userId, body.title, body.summary, undefined, body.sessionType as any, body.isDangerous);
   }
 
   /**

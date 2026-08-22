@@ -23,6 +23,7 @@ export class ChatHistoryService {
     summary: string,
     sessionId?: number,
     sessionType: ChatSessionType = 'AI_DIAGNOSIS',
+    isDangerous: boolean = false,
   ) {
     try {
       let finalSummary = summary;
@@ -60,6 +61,7 @@ export class ChatHistoryService {
           data: {
             aiSummary: finalSummary,
             symptom: finalSummary,
+            isDangerous: isDangerous,
           },
           select: {
             id: true,
@@ -86,6 +88,7 @@ export class ChatHistoryService {
           aiSummary: finalSummary,
           symptom: finalSummary,
           sessionType,
+          isDangerous,
         },
         select: {
           id: true,
